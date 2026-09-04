@@ -6,6 +6,7 @@ Last updated: 2026-09-04
 
 ## Sources scanned
 
+- .agents/skills
 - /Users/enocgarciadev/.config/opencode/skills
 
 ## Contract
@@ -27,6 +28,7 @@ Last updated: 2026-09-04
 | `issue-creation` | Create and triage GitHub issues from repository evidence. Trigger: issue creation, bug reports, feature requests, or issue approval. | user | `/Users/enocgarciadev/.config/opencode/skills/issue-creation/SKILL.md` |
 | `judgment-day` | Trigger: judgment day, dual review, adversarial review, juzgar. Run explicit blind dual review with at most two scoped fix/re-judgment rounds. | user | `/Users/enocgarciadev/.config/opencode/skills/judgment-day/SKILL.md` |
 | `rdd-defect-workflow` | Trigger: RDD, receipt-driven development, review authority, receipt/lineage, correction/recovery, delivery gate/kill switch, bounded review defects. Guide work. | user | `/Users/enocgarciadev/.config/opencode/skills/rdd-defect-workflow/SKILL.md` |
+| `shadcn` | Manages shadcn components and projects — adding, searching, fixing, debugging, styling, and composing UI, including chat interfaces. Provides project context, component docs, and usage examples. Applies when working with shadcn/ui, component registries, presets, --preset codes, or any project with a components.json file. Also triggers for "shadcn init", "create an app with --preset", or "switch to --preset". | project | `/Users/enocgarciadev/Code/frontend-system-design-homework-uni/.agents/skills/shadcn/SKILL.md` |
 | `skill-creator` | Trigger: new skills, agent instructions, documenting AI usage patterns. Create LLM-first skills with valid frontmatter. | user | `/Users/enocgarciadev/.config/opencode/skills/skill-creator/SKILL.md` |
 | `skill-improver` | Trigger: improve skills, audit skills, refactor skills, skill quality. Audit and upgrade existing LLM-first skills. | user | `/Users/enocgarciadev/.config/opencode/skills/skill-improver/SKILL.md` |
 | `systemic-issue-triage` | Trigger: new issue, bug report, triage, backlog, issue flood, community report, root cause, dead-end, blocked user. Attack issues by root class, never one-by-one; fixes must shrink the system, not grow it. | user | `/Users/enocgarciadev/.config/opencode/skills/systemic-issue-triage/SKILL.md` |

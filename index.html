@@ -1,10 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend-system-design-homework-uni</title>
+    <title>PulpeStock Web</title>
+    <script>
+      // Aplica el tema antes del primer render para evitar un destello.
+      ;(function () {
+        try {
+          var stored = localStorage.getItem('pulpestock-theme')
+          var prefersDark = window.matchMedia(
+            '(prefers-color-scheme: dark)',
+          ).matches
+          if (stored === 'dark' || (!stored && prefersDark)) {
+            document.documentElement.classList.add('dark')
+          }
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
