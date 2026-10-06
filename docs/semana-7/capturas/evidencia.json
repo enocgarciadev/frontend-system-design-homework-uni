@@ -1,0 +1,93 @@
+{
+  "url": "http://127.0.0.1:5173/",
+  "sourceCommit": "0f267f8f336923c98a2c7f0df226caedd539347f",
+  "date": "2026-10-06",
+  "screenshots": [
+    {
+      "file": "escritorio-pos.png",
+      "width": 1440,
+      "height": 900,
+      "scenario": "1 arroz + 1 frijol, total C$80, efectivo C$100, vuelto C$20"
+    },
+    {
+      "file": "movil-pos.png",
+      "width": 390,
+      "height": 844,
+      "scenario": "1 arroz + 1 frijol, total C$80, efectivo C$100, vuelto C$20"
+    },
+    {
+      "file": "movil-cobro.png",
+      "width": 390,
+      "height": 844,
+      "scenario": "Detalle del ticket y cobro, mismo carrito"
+    }
+  ],
+  "checks": [
+    "escritorio: efectivo C$50 bloquea cobro de C$80",
+    "escritorio: venta C$80 con C$100; ticket vacío y arroz 24 -> 23 y frijol 18 -> 17",
+    "escritorio: recarga restablece stock; no hay persistencia de ventas",
+    "movil: efectivo C$50 bloquea cobro de C$80",
+    "movil: venta C$80 con C$100; ticket vacío y arroz 24 -> 23 y frijol 18 -> 17",
+    "movil: recarga restablece stock; no hay persistencia de ventas",
+    "Productos navega a placeholder explícito"
+  ],
+  "errors": [],
+  "breakpoints": [
+    {
+      "width": 639,
+      "pageOverflow": false,
+      "columns": "290.5px 290.5px",
+      "sidebarMobile": true,
+      "posColumns": 1
+    },
+    {
+      "width": 640,
+      "pageOverflow": false,
+      "columns": "185.328px 185.328px 185.328px",
+      "sidebarMobile": true,
+      "posColumns": 1
+    },
+    {
+      "width": 767,
+      "pageOverflow": false,
+      "columns": "227.656px 227.672px 227.672px",
+      "sidebarMobile": true,
+      "posColumns": 1
+    },
+    {
+      "width": 768,
+      "pageOverflow": false,
+      "columns": "142.656px 142.672px 142.672px",
+      "sidebarMobile": false,
+      "posColumns": 1
+    },
+    {
+      "width": 1023,
+      "pageOverflow": false,
+      "columns": "227.656px 227.672px 227.672px",
+      "sidebarMobile": false,
+      "posColumns": 1
+    },
+    {
+      "width": 1024,
+      "pageOverflow": false,
+      "columns": "80px 80px 80px",
+      "sidebarMobile": false,
+      "posColumns": 2
+    },
+    {
+      "width": 1535,
+      "pageOverflow": false,
+      "columns": "250.328px 250.328px 250.328px",
+      "sidebarMobile": false,
+      "posColumns": 2
+    },
+    {
+      "width": 1536,
+      "pageOverflow": false,
+      "columns": "185.5px 185.5px 185.5px 185.5px",
+      "sidebarMobile": false,
+      "posColumns": 2
+    }
+  ]
+}
