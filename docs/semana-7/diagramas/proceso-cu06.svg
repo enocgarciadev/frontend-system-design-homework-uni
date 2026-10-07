@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1050" viewBox="0 0 1500 1050"><rect width="100%" height="100%" fill="white"/>
+<text x="750" y="51.56" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" fill="#17212b">Proceso actual CU 06 de cobro y salida de stock</text>
+<rect x="490" y="100" width="520" height="85" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="750.0" y="151.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Buscar producto y filtrar categoría</text>
+<rect x="490" y="230" width="520" height="85" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="750.0" y="281.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Agregar si tiene stock disponible</text>
+<polyline points="750,185 750,230" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="750,230 743.9104825224427,217.39374056706254 756.0895174775573,217.39374056706254" fill="#425466"/>
+<rect x="490" y="360" width="520" height="85" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="750.0" y="411.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Ajustar cantidad entre 1 y stockActual</text>
+<polyline points="750,315 750,360" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="750,360 743.9104825224427,347.39374056706254 756.0895174775573,347.39374056706254" fill="#425466"/>
+<rect x="490" y="490" width="520" height="85" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="750.0" y="541.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Calcular total e ingresar efectivo</text>
+<polyline points="750,445 750,490" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="750,490 743.9104825224427,477.39374056706254 756.0895174775573,477.39374056706254" fill="#425466"/>
+<polygon points="750.0,605 1010,670.0 750.0,735 490,670.0" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="750.0" y="663.82" text-anchor="middle" font-family="Arial,sans-serif" font-size="23" fill="#17212b">¿Hay artículos y</text>
+<text x="750.0" y="691.82" text-anchor="middle" font-family="Arial,sans-serif" font-size="23" fill="#17212b">efectivo ≥ total?</text>
+<polyline points="750,575 750,605" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="750,605 743.9104825224427,592.3937405670625 756.0895174775573,592.3937405670625" fill="#425466"/>
+<rect x="40" y="620" width="330" height="95" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="205.0" y="659.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">No: bloquear cobro</text>
+<text x="205.0" y="693.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Corregir ticket o efectivo</text>
+<polyline points="490,668 370,668" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="370,668 382.60625943293746,661.9104825224427 382.60625943293746,674.0895174775573" fill="#425466"/>
+<text x="430" y="649.48" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#17212b">No</text>
+<polyline points="205,620 205,532 490,532" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="490,532 477.39374056706254,538.0895174775573 477.39374056706254,525.9104825224427" fill="#425466"/>
+<rect x="490" y="770" width="520" height="95" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="750.0" y="809.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Sí: descontar stock local</text>
+<text x="750.0" y="843.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Mostrar toast y vaciar ticket</text>
+<polyline points="750,735 750,770" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="750,770 743.9104825224427,757.3937405670625 756.0895174775573,757.3937405670625" fill="#425466"/>
+<text x="790" y="749.48" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#17212b">Sí</text>
+<rect x="1090" y="770" width="350" height="95" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="1265.0" y="809.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Recarga o salir de POS</text>
+<text x="1265.0" y="843.0" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Restablece catálogo inicial</text>
+<polyline points="1010,818 1090,818" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="1090,818 1077.3937405670624,824.0895174775573 1077.3937405670624,811.9104825224427" fill="#425466"/>
+<text x="750" y="978.84" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" fill="#17212b">No se registra una venta persistente ni se valida stock contra un servidor.</text>
+</svg>

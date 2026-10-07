@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="810" viewBox="0 0 1500 810"><rect width="100%" height="100%" fill="white"/>
+<text x="750" y="49.56" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" fill="#17212b">Modelo de contenido de PulpeStock Web</text>
+<rect x="50" y="110" width="390" height="210" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="245.0" y="189.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Categoría [actual]</text>
+<text x="245.0" y="223.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">id</text>
+<text x="245.0" y="257.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">label</text>
+<rect x="580" y="110" width="550" height="210" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="855.0" y="172.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Producto [actual]</text>
+<text x="855.0" y="206.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">id · nombre · categoria</text>
+<text x="855.0" y="240.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">precioVenta · codigoBarras</text>
+<text x="855.0" y="274.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">stockActual · stockMinimo</text>
+<polyline points="440,220 580,220" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="580,220 567.3937405670625,226.08951747755722 567.3937405670625,213.91048252244278" fill="#425466"/>
+<text x="510" y="197.48" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#17212b">1 a N</text>
+<rect x="50" y="480" width="390" height="190" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="245.0" y="549.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Ticket temporal [actual]</text>
+<text x="245.0" y="583.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">cart: productoId → cantidad</text>
+<text x="245.0" y="617.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">cash: efectivo recibido</text>
+<polyline points="855,320 855,480" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="855,480 848.9104825224427,467.39374056706254 861.0895174775573,467.39374056706254" fill="#425466"/>
+<text x="1005" y="402.48" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#17212b">1 producto por línea</text>
+<rect x="580" y="480" width="550" height="190" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="855.0" y="549.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Línea del ticket [derivada]</text>
+<text x="855.0" y="583.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">product · quantity</text>
+<text x="855.0" y="617.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">importe = precioVenta × quantity</text>
+<polyline points="440,580 580,580" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="580,580 567.3937405670625,586.0895174775573 567.3937405670625,573.9104825224427" fill="#425466"/>
+<text x="510" y="555.48" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#17212b">1 a N</text>
+<rect x="1190" y="110" width="250" height="210" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="1315.0" y="172.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Venta</text>
+<text x="1315.0" y="206.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">[propuesta]</text>
+<text x="1315.0" y="240.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">fecha · total</text>
+<text x="1315.0" y="274.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">efectivo · vuelto</text>
+<rect x="1190" y="480" width="250" height="190" rx="12" fill="#edf3f8" stroke="#425466" stroke-width="2"/>
+<text x="1315.0" y="532.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">DetalleVenta</text>
+<text x="1315.0" y="566.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">[propuesta]</text>
+<text x="1315.0" y="600.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">ventaId · productoId</text>
+<text x="1315.0" y="634.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">cantidad · precio</text>
+<polyline points="1315,320 1315,480" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="1315,480 1308.9104825224429,467.39374056706254 1321.0895174775571,467.39374056706254" fill="#425466"/>
+<text x="1390" y="407.48" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#17212b">1 a N</text>
+<polyline points="1130,220 1160,220 1160,575 1190,575" fill="none" stroke="#425466" stroke-width="3"/>
+<polygon points="1190,575 1177.3937405670624,581.0895174775573 1177.3937405670624,568.9104825224427" fill="#425466"/>
+<text x="750" y="760.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" fill="#17212b">Actual = estructuras en memoria. Propuesta = persistencia SQL pendiente.</text>
+</svg>

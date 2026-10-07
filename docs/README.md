@@ -22,3 +22,8 @@ y actualizalos a medida que el proyecto crece.
   cambios" section and keep the English and Spanish files aligned. / Cuando se
   implemente una feature, sumá una entrada a la sección "Update log" /
   "Registro de cambios" y mantené alineados los archivos en inglés y español.
+
+## Semana 7 / Week 7
+
+- [Entrega consolidada de Semana 7](semana-7/README.md): servicios web, OOHDM, perspectivas y movilidad de PulpeStock Web, con diagramas, capturas reales, DOCX y PDF.
+- [Week 7 consolidated submission](semana-7/README.md): infrastructure proposal, OOHDM artifacts, system models and responsive evidence. The Spanish report distinguishes implemented frontend behavior from the proposed backend.
