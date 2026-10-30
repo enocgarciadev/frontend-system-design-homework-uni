@@ -13,7 +13,7 @@ test('API responde y el frontend indica que está conectada', async ({ page }) =
   expect(pageErrors).toEqual([])
 })
 
-test('el POS conserva el cobro y validación del efectivo', async ({ page, isMobile }) => {
+test('el POS conserva el cobro y validación del efectivo', async ({ page }, testInfo) => {
   const pageErrors = []
   page.on('pageerror', (error) => pageErrors.push(error.message))
 
@@ -26,7 +26,7 @@ test('el POS conserva el cobro y validación del efectivo', async ({ page, isMob
   await expect(page.getByRole('button', { name: 'Cobrar y Descontar Stock' })).toBeDisabled()
 
   await page.getByRole('spinbutton', { name: 'Efectivo recibido' }).fill('100')
-  if (isMobile) {
+  if (testInfo.project.name === 'mobile-chromium') {
     await page.getByRole('button', { name: 'Cobrar', exact: true }).click()
   } else {
     await page.getByRole('button', { name: 'Cobrar y Descontar Stock' }).click()
