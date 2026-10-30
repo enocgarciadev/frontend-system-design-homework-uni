@@ -27,6 +27,11 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgres://pulpestock:pulpestock_test@127.0.0.1:5432/pulpestock_test?sslmode=disable
+      BOOTSTRAP_NAME: Administrador CI
+      BOOTSTRAP_EMAIL: admin@pulpestock.test
+      BOOTSTRAP_ROLE: admin
+      BOOTSTRAP_PASSWORD: CI-Only-Strong-Password-2026
+      TEST_ADMIN_PASSWORD: CI-Only-Strong-Password-2026
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -47,6 +52,8 @@ jobs:
         run: pnpm build
       - name: Apply schema and demo data
         run: go run ./server/cmd/migrate
+      - name: Create CI-only administrator
+        run: go run ./server/cmd/createuser
       - name: Test API (Go)
         run: go test -race ./server/...
       - name: Vet Go

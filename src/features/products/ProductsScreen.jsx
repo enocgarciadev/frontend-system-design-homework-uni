@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Pencil, Plus, Search, Trash2 } from 'lucide-react'
 import { CATEGORIES, CATEGORY_LABELS } from '@/data/products'
 import { formatCurrency } from '@/lib/format'
+import { apiFetch } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -107,7 +108,7 @@ function ProductsScreen() {
       const url = editing
         ? `${apiBaseUrl}/api/productos/${encodeURIComponent(editing)}`
         : `${apiBaseUrl}/api/productos`
-      const response = await fetch(url, {
+      const response = await apiFetch(editing ? `/api/productos/${encodeURIComponent(editing)}` : '/api/productos', {
         method: editing ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(input),
@@ -132,7 +133,7 @@ function ProductsScreen() {
     setError('')
     setNotice('')
     try {
-      const response = await fetch(`${apiBaseUrl}/api/productos/${encodeURIComponent(product.id)}`, {
+      const response = await apiFetch(`/api/productos/${encodeURIComponent(product.id)}`, {
         method: 'DELETE',
       })
       if (!response.ok) {
