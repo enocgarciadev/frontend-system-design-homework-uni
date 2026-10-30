@@ -22,6 +22,7 @@ las decisiones detrás y lo que viene. Leelo antes de extender el código.
 | Scaffold: Vite + React 19 + Tailwind v4 | Hecho |
 | Registro completo de shadcn/ui sobre Base UI (`base-nova`, modo JS) | Hecho |
 | CU-06 Punto de venta + salida de stock | Hecho |
+| API en Go (solo health) | Hecho en PR 1 — no hay aún persistencia ni lógica de negocio en servidor |
 | Shell de la app (sidebar, header, perfil) | Hecho |
 | Navegación de módulos futuros (placeholders) | Hecho |
 | Tema claro/oscuro | Hecho |
@@ -34,6 +35,7 @@ las decisiones detrás y lo que viene. Leelo antes de extender el código.
 | Tema | Decisión |
 |------|----------|
 | Framework | Vite 8 + React 19 |
+| Backend | Go 1.23 (`net/http`) para health; PostgreSQL y endpoints de negocio pendientes |
 | Lenguaje | JavaScript (JSX). TypeScript es recomendado por shadcn, pero el proyecto nació en JS y sigue en JS (`components.json` con `tsx: false`). |
 | Base de componentes | shadcn/ui sobre **Base UI** (`--base base`), preset `Nova`, íconos `lucide` |
 | Estilos | Tailwind CSS v4 vía `@tailwindcss/vite`; tokens en `src/index.css`; variante `.dark` en `html` |

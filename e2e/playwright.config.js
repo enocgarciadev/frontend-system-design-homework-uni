@@ -20,11 +20,11 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'node server/index.js',
+      command: 'go run ./server/cmd/api',
       cwd: root,
       url: 'http://127.0.0.1:3001/api/health',
       reuseExisting: !process.env.CI,
-      timeout: 30_000,
+      timeout: 120_000,
     },
     {
       command: 'pnpm dev --host 127.0.0.1',
