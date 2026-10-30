@@ -90,3 +90,7 @@ Versión en inglés: [README.md](README.md)
 La API de negocio requiere una base PostgreSQL. Inicializá un esquema vacío con `DATABASE_URL`, ejecutá `go run ./server/cmd/migrate` y luego `go run ./server/cmd/api`. Con `pnpm dev` el POS consume `GET /api/productos` y registra ventas mediante `POST /api/ventas`. No hay modo ficticio cuando falla la API: el cobro exige respuesta exitosa del servidor. Las ventas, detalles, movimientos y existencias se guardan mediante transacciones.
 
 Ver [guía de PR 2](docs/pr02-persistencia.md). No se incluye autenticación; usar solamente en un entorno de desarrollo o evaluación aislado.
+
+## Stacked PR — Interfaz de productos
+
+El módulo **Productos** permite crear, editar y desactivar artículos con validaciones del backend Go y persistencia en PostgreSQL. Los cambios de stock de un artículo ya registrado están bloqueados desde el formulario de edición hasta implementar el módulo de movimientos. Ver `docs/pr04-products-ui.md`.

@@ -27,6 +27,11 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgres://pulpestock:pulpestock_test@127.0.0.1:5432/pulpestock_test?sslmode=disable
+      BOOTSTRAP_NAME: Administrador CI
+      BOOTSTRAP_EMAIL: admin@pulpestock.test
+      BOOTSTRAP_ROLE: admin
+      BOOTSTRAP_PASSWORD: CI-Only-Strong-Password-2026
+      TEST_ADMIN_PASSWORD: CI-Only-Strong-Password-2026
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -47,6 +52,8 @@ jobs:
         run: pnpm build
       - name: Apply schema and demo data
         run: go run ./server/cmd/migrate
+      - name: Create CI-only administrator
+        run: go run ./server/cmd/createuser
       - name: Test API (Go)
         run: go test -race ./server/...
       - name: Vet Go
@@ -57,3 +64,23 @@ jobs:
         run: ./e2e/node_modules/.bin/playwright install --with-deps chromium
       - name: Test UI in real Chromium (desktop and mobile)
         run: npm --prefix e2e test
+
+      - name: Empaquetar código fuente del commit
+        if: success()
+        run: |
+          mkdir -p artifacts
+          git archive --format=zip --output=artifacts/PulpeStock-Web-Trabajo-12-fuente.zip HEAD
+      - name: Publicar ZIP de código
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PulpeStock-Web-Trabajo-12-fuente
+          path: artifacts/PulpeStock-Web-Trabajo-12-fuente.zip
+          if-no-files-found: error
+      - name: Publicar evidencias Chromium
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PulpeStock-Web-evidencias-Chromium
+          path: e2e/evidence/
+          if-no-files-found: warn

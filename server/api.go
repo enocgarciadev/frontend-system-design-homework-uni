@@ -6,6 +6,7 @@ import (
  "io"
  "strings"
  "net/http"
+ "strconv"
 )
 
 func NewHandler(store *Store) http.Handler {
@@ -46,9 +47,35 @@ func NewHandler(store *Store) http.Handler {
   default: methodNotAllowed(w,"PUT, DELETE")
   }
  })
- mux.HandleFunc("/api/ventas",func(w http.ResponseWriter,r *http.Request){
-  if r.Method != http.MethodPost { methodNotAllowed(w,"POST"); return }
+ mux.HandleFunc("/api/movimientos",func(w http.ResponseWriter,r *http.Request){
   if store == nil { writeJSON(w,503,map[string]string{"error":"Base de datos no disponible"}); return }
+  switch r.Method {
+  case http.MethodGet:
+   movements,err := store.ListMovements(r.Context())
+   if err != nil { writeJSON(w,500,map[string]string{"error":"No se pudieron consultar los movimientos"}); return }
+   writeJSON(w,200,movements)
+  case http.MethodPost:
+   var input MovementInput
+   if !decodeJSON(w,r,&input) { return }
+   movement,err := store.CreateMovement(r.Context(),input)
+   if err != nil {
+    var domain *DomainError
+    if errors.As(err,&domain){ writeJSON(w,domain.Code,map[string]string{"error":domain.Message});return }
+    writeJSON(w,500,map[string]string{"error":"No se pudo registrar el movimiento"});return
+   }
+   writeJSON(w,201,movement)
+  default: methodNotAllowed(w,"GET, POST")
+  }
+ })
+ mux.HandleFunc("/api/ventas",func(w http.ResponseWriter,r *http.Request){
+  if r.Method != http.MethodGet && r.Method != http.MethodPost { methodNotAllowed(w,"GET, POST"); return }
+  if store == nil { writeJSON(w,503,map[string]string{"error":"Base de datos no disponible"}); return }
+  if r.Method == http.MethodGet {
+    sales,err := store.ListSales(r.Context())
+    if err != nil { writeJSON(w,500,map[string]string{"error":"No se pudo consultar el historial"});return }
+    writeJSON(w,200,sales)
+    return
+  }
   r.Body = http.MaxBytesReader(w,r.Body,65536)
   dec := json.NewDecoder(r.Body)
   dec.DisallowUnknownFields()
@@ -66,8 +93,30 @@ func NewHandler(store *Store) http.Handler {
   if sale.Reused { status = http.StatusOK }
   writeJSON(w,status,sale)
  })
+ mux.HandleFunc("/api/ventas/",func(w http.ResponseWriter,r *http.Request){
+  if r.Method != http.MethodGet { methodNotAllowed(w,"GET");return }
+  if store == nil { writeJSON(w,503,map[string]string{"error":"Base de datos no disponible"}); return }
+  rawID := strings.TrimPrefix(r.URL.Path,"/api/ventas/")
+  id,err := strconv.ParseInt(rawID,10,64)
+  if err!=nil || id<1 || strconv.FormatInt(id,10)!=rawID {writeJSON(w,404,map[string]string{"error":"Venta no encontrada"});return}
+  sale,err := store.GetSale(r.Context(),id)
+  if err!=nil {
+   var domain *DomainError
+   if errors.As(err,&domain){writeJSON(w,domain.Code,map[string]string{"error":domain.Message});return}
+   writeJSON(w,500,map[string]string{"error":"No se pudo consultar el detalle"});return
+  }
+  writeJSON(w,200,sale)
+ })
+ mux.HandleFunc("/api/reportes/resumen",func(w http.ResponseWriter,r *http.Request) {
+  if r.Method!=http.MethodGet {methodNotAllowed(w,"GET");return}
+  if store==nil {writeJSON(w,503,map[string]string{"error":"Base de datos no disponible"});return}
+  report,err:=store.InventoryReport(r.Context())
+  if err!=nil{writeJSON(w,500,map[string]string{"error":"No se pudo generar el reporte"});return}
+  writeJSON(w,200,report)
+ })
+ registerAuthRoutes(mux,store)
  mux.HandleFunc("/",func(w http.ResponseWriter,_ *http.Request){ writeJSON(w,404,map[string]string{"error":"Not Found"}) })
- return mux
+ return protectBusinessRoutes(mux,store)
 }
 
 func methodNotAllowed(w http.ResponseWriter,method string){
