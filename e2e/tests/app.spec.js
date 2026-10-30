@@ -160,3 +160,39 @@ test('rechaza ajustes que dejarían stock negativo', async ({ page }, testInfo) 
   await expect(page.getByRole('alert')).toContainText('existencias negativas')
   expect((await readCatalog(page)).find(p => p.id === 'agua-cristal-600ml').stockActual).toBe(0)
 })
+
+async function openSalesHistory(page, projectName) {
+  if (projectName === 'mobile-chromium') {
+    await page.getByRole('button', { name: 'Toggle Sidebar' }).first().click()
+  }
+  await page.getByRole('button', { name: 'Ventas', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Historial de ventas' })).toBeVisible()
+}
+
+test('historial muestra una venta persistida y sus precios históricos', async ({ page }, testInfo) => {
+  const errors = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  const response = await page.request.post('/api/ventas', {
+    data: {
+      requestId: crypto.randomUUID(),
+      cashReceived: 100,
+      items: [{ productId: 'arroz-faisan-1lb', quantity: 1 }],
+    },
+  })
+  expect(response.status()).toBe(201)
+  const saved = await response.json()
+  expect(saved.total).toBe(38)
+  await page.goto('/')
+  await openSalesHistory(page, testInfo.project.name)
+  await expect(page.getByText(`Venta #${saved.id}`, { exact: true })).toBeVisible()
+  await page.getByRole('button', { name: `Ver detalle de venta #${saved.id}` }).click()
+  await expect(page.getByText(`Detalle de venta #${saved.id}`)).toBeVisible()
+  await expect(page.getByText('Arroz Faisán 1lb')).toBeVisible()
+  await expect(page.getByText(/Cantidad 1 ×/)).toBeVisible()
+  await page.reload()
+  await openSalesHistory(page, testInfo.project.name)
+  await expect(page.getByText(`Venta #${saved.id}`, { exact: true })).toBeVisible()
+  await page.getByRole('button', { name: `Ver detalle de venta #${saved.id}` }).click()
+  await expect(page.getByText(`Detalle de venta #${saved.id}`)).toBeVisible()
+  expect(errors).toEqual([])
+})
