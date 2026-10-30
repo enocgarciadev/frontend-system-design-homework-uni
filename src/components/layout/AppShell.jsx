@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import ApiStatus from './ApiStatus'
 import { PackageOpen } from 'lucide-react'
 import {
   Card,
@@ -63,6 +64,7 @@ function AppShell() {
           </h1>
 
           <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+            <ApiStatus />
             <ModeToggle />
             <UserMenu />
           </div>

@@ -1,0 +1,36 @@
+name: CI - API, frontend y navegador
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - name: Install frontend
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Build frontend
+        run: pnpm build
+      - name: Test API
+        run: pnpm test:api
+      - name: Install Playwright test runner
+        run: npm install --prefix e2e --no-audit --no-fund
+      - name: Install Chromium
+        run: ./e2e/node_modules/.bin/playwright install --with-deps chromium
+      - name: Test UI in real Chromium (desktop and mobile)
+        run: npm --prefix e2e test

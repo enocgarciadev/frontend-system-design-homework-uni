@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "api:start": "node server/index.js",
+    "api:dev": "node --watch server/index.js",
+    "test:api": "node --test server/*.test.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
