@@ -15,7 +15,7 @@ func Migrate(ctx context.Context, db *sql.DB) error {
  tx, err := db.BeginTx(ctx, nil)
  if err != nil { return err }
  defer tx.Rollback()
- for _, file := range []string{"db/001_schema.sql", "db/002_seed.sql"} {
+ for _, file := range []string{"db/001_schema.sql", "db/002_seed.sql", "db/003_auth.sql"} {
   statement, err := migrations.ReadFile(file)
   if err != nil { return err }
   if _, err = tx.ExecContext(ctx, string(statement)); err != nil { return fmt.Errorf("%s: %w", file, err) }
