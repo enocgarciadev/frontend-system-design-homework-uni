@@ -16,6 +16,7 @@ import {
 import PosScreen from '@/features/pos/PosScreen'
 import ProductsScreen from '@/features/products/ProductsScreen'
 import MovementsScreen from '@/features/movements/MovementsScreen'
+import SalesHistoryScreen from '@/features/sales/SalesHistoryScreen'
 import AppSidebar from './AppSidebar'
 import ModeToggle from './ModeToggle'
 import UserMenu from './UserMenu'
@@ -79,6 +80,8 @@ function AppShell() {
             <ProductsScreen />
           ) : activeId === 'movimientos' ? (
             <MovementsScreen />
+          ) : activeId === 'ventas' ? (
+            <SalesHistoryScreen />
           ) : (
             <ModulePlaceholder moduleId={activeId} />
           )}
