@@ -251,7 +251,7 @@ test('reportes visuales reflejan los datos reales de PostgreSQL', async ({ page 
   await expect(page.getByTestId('report-products-total')).toHaveText(String(report.productsTotal))
   await expect(page.getByTestId('report-low-stock')).toHaveText(String(report.lowStockCount))
   await expect(page.getByTestId('report-out-of-stock')).toHaveText(String(report.outOfStockCount))
-  await expect(page.getByRole('heading', { name: 'Productos para reponer' })).toBeVisible()
+  await expect(page.getByText('Productos para reponer', { exact: true })).toBeVisible()
   await page.reload()
   await openReports(page, testInfo.project.name)
   await expect(page.getByTestId('report-products-total')).toHaveText(String(report.productsTotal))
