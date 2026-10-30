@@ -66,3 +66,52 @@ test('API impide la venta si no hay stock y mantiene las existencias', async ({ 
   expect(response.status()).toBe(409)
   expect(byId(await readCatalog(page), 'agua-cristal-600ml').stockActual).toBe(0)
 })
+
+async function openProducts(page, projectName) {
+  if (projectName === 'mobile-chromium') {
+    await page.getByRole('button', { name: 'Toggle Sidebar' }).first().click()
+  }
+  await page.getByRole('button', { name: 'Productos', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Gestión de productos' })).toBeVisible()
+}
+
+test('gestiona productos en React y persiste en PostgreSQL', async ({ page }, testInfo) => {
+  const errors = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  const id = `e2e-product-${Date.now()}-${testInfo.project.name === 'mobile-chromium' ? 'm' : 'd'}`
+  const name = `Producto demo ${id}`
+
+  await page.goto('/')
+  await openProducts(page, testInfo.project.name)
+  await page.getByRole('button', { name: 'Nuevo producto' }).click()
+  await page.getByLabel('Código interno').fill(id)
+  await page.getByLabel('Nombre del producto').fill(name)
+  await page.getByLabel('Precio de venta (C$)').fill('24.50')
+  await page.getByLabel('Stock inicial').fill('9')
+  await page.getByLabel('Stock mínimo').fill('2')
+  await page.getByRole('button', { name: 'Guardar producto' }).click()
+  await expect(page.getByText('Producto creado correctamente.')).toBeVisible()
+
+  await page.getByRole('textbox', { name: 'Buscar en productos' }).fill(id)
+  await expect(page.getByRole('heading', { name })).toBeVisible()
+  await page.reload()
+  await openProducts(page, testInfo.project.name)
+  await page.getByRole('textbox', { name: 'Buscar en productos' }).fill(id)
+  await page.getByRole('button', { name: `Editar ${name}` }).click()
+  await page.getByLabel('Nombre del producto').fill(`${name} editado`)
+  await page.getByLabel('Precio de venta (C$)').fill('30.25')
+  await expect(page.getByLabel('Stock actual (solo lectura)')).toBeDisabled()
+  await page.getByRole('button', { name: 'Guardar producto' }).click()
+  await expect(page.getByText('Producto actualizado correctamente.')).toBeVisible()
+  await expect(page.getByRole('heading', { name: `${name} editado` })).toBeVisible()
+
+  await page.getByRole('button', { name: `Desactivar ${name} editado` }).click()
+  await page.getByRole('button', { name: `Confirmar baja de ${name} editado` }).click()
+  await expect(page.getByText('Producto desactivado. Las ventas anteriores se conservan.')).toBeVisible()
+  await expect(page.getByRole('heading', { name: `${name} editado` })).toHaveCount(0)
+  await page.reload()
+  await openProducts(page, testInfo.project.name)
+  await page.getByRole('textbox', { name: 'Buscar en productos' }).fill(id)
+  await expect(page.getByRole('heading', { name: `${name} editado` })).toHaveCount(0)
+  expect(errors).toEqual([])
+})

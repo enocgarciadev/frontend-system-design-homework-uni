@@ -14,6 +14,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 import PosScreen from '@/features/pos/PosScreen'
+import ProductsScreen from '@/features/products/ProductsScreen'
 import AppSidebar from './AppSidebar'
 import ModeToggle from './ModeToggle'
 import UserMenu from './UserMenu'
@@ -73,6 +74,8 @@ function AppShell() {
         <div className="min-h-0 flex-1 bg-muted/30 p-3 sm:p-4 lg:overflow-hidden lg:p-5">
           {activeId === 'pos' ? (
             <PosScreen />
+          ) : activeId === 'productos' ? (
+            <ProductsScreen />
           ) : (
             <ModulePlaceholder moduleId={activeId} />
           )}

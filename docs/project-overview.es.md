@@ -27,7 +27,7 @@ las decisiones detrás y lo que viene. Leelo antes de extender el código.
 | Navegación de módulos futuros (placeholders) | Hecho |
 | Tema claro/oscuro | Hecho |
 | Autenticación / cerrar sesión | Pendiente — solo toast demo |
-| Módulos de inventario (productos, categorías, movimientos) | Pendiente |
+| CRUD de productos | Stacked PR B: interfaz React y endpoints Go; categorías y movimientos pendientes |
 | Historial de ventas, caja, reportes, clientes, proveedores, compras, usuarios | Pendiente |
 
 ## Decisiones
