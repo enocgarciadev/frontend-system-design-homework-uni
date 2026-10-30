@@ -115,3 +115,48 @@ test('gestiona productos en React y persiste en PostgreSQL', async ({ page }, te
   await expect(page.getByRole('heading', { name: `${name} editado` })).toHaveCount(0)
   expect(errors).toEqual([])
 })
+
+async function openMovements(page, projectName) {
+  if (projectName === 'mobile-chromium') {
+    await page.getByRole('button', { name: 'Toggle Sidebar' }).first().click()
+  }
+  await page.getByRole('button', { name: 'Movimientos', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Movimientos de inventario' })).toBeVisible()
+}
+
+test('entradas y ajustes de stock quedan persistidos tras recarga', async ({ page }, testInfo) => {
+  const errors = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  const original = (await readCatalog(page)).find(p => p.id === 'arroz-faisan-1lb').stockActual
+  await page.goto('/')
+  await openMovements(page, testInfo.project.name)
+  await page.getByLabel('Producto', { exact: true }).selectOption('arroz-faisan-1lb')
+  await page.getByLabel('Variación (unidades)').fill('3')
+  await page.getByRole('button', { name: 'Registrar movimiento' }).click()
+  await expect(page.getByText(`Movimiento registrado. Nuevo stock de Arroz Faisán 1lb: ${original + 3}.`)).toBeVisible()
+  expect((await readCatalog(page)).find(p => p.id === 'arroz-faisan-1lb').stockActual).toBe(original + 3)
+
+  await page.getByLabel('Tipo de movimiento').selectOption('ajuste')
+  await page.getByLabel('Variación (unidades)').fill('-1')
+  await page.getByRole('button', { name: 'Registrar movimiento' }).click()
+  await expect(page.getByText(`Movimiento registrado. Nuevo stock de Arroz Faisán 1lb: ${original + 2}.`)).toBeVisible()
+  await page.reload()
+  await openMovements(page, testInfo.project.name)
+  await page.getByLabel('Producto', { exact: true }).selectOption('arroz-faisan-1lb')
+  await expect(page.getByText(`Existencia actual: ${original + 2}`)).toBeVisible()
+  expect((await readCatalog(page)).find(p => p.id === 'arroz-faisan-1lb').stockActual).toBe(original + 2)
+  expect(errors).toEqual([])
+})
+
+test('rechaza ajustes que dejarían stock negativo', async ({ page }, testInfo) => {
+  const stock = (await readCatalog(page)).find(p => p.id === 'agua-cristal-600ml').stockActual
+  expect(stock).toBe(0)
+  await page.goto('/')
+  await openMovements(page, testInfo.project.name)
+  await page.getByLabel('Producto', { exact: true }).selectOption('agua-cristal-600ml')
+  await page.getByLabel('Tipo de movimiento').selectOption('ajuste')
+  await page.getByLabel('Variación (unidades)').fill('-1')
+  await page.getByRole('button', { name: 'Registrar movimiento' }).click()
+  await expect(page.getByRole('alert')).toContainText('existencias negativas')
+  expect((await readCatalog(page)).find(p => p.id === 'agua-cristal-600ml').stockActual).toBe(0)
+})

@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sidebar'
 import PosScreen from '@/features/pos/PosScreen'
 import ProductsScreen from '@/features/products/ProductsScreen'
+import MovementsScreen from '@/features/movements/MovementsScreen'
 import AppSidebar from './AppSidebar'
 import ModeToggle from './ModeToggle'
 import UserMenu from './UserMenu'
@@ -76,6 +77,8 @@ function AppShell() {
             <PosScreen />
           ) : activeId === 'productos' ? (
             <ProductsScreen />
+          ) : activeId === 'movimientos' ? (
+            <MovementsScreen />
           ) : (
             <ModulePlaceholder moduleId={activeId} />
           )}
