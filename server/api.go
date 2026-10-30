@@ -107,6 +107,13 @@ func NewHandler(store *Store) http.Handler {
   }
   writeJSON(w,200,sale)
  })
+ mux.HandleFunc("/api/reportes/resumen",func(w http.ResponseWriter,r *http.Request) {
+  if r.Method!=http.MethodGet {methodNotAllowed(w,"GET");return}
+  if store==nil {writeJSON(w,503,map[string]string{"error":"Base de datos no disponible"});return}
+  report,err:=store.InventoryReport(r.Context())
+  if err!=nil{writeJSON(w,500,map[string]string{"error":"No se pudo generar el reporte"});return}
+  writeJSON(w,200,report)
+ })
  registerAuthRoutes(mux,store)
  mux.HandleFunc("/",func(w http.ResponseWriter,_ *http.Request){ writeJSON(w,404,map[string]string{"error":"Not Found"}) })
  return protectBusinessRoutes(mux,store)

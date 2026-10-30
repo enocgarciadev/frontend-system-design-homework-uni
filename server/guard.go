@@ -19,6 +19,7 @@ func protectBusinessRoutes(mux *http.ServeMux,store *Store) http.Handler {
   session,err:=store.CurrentSession(r)
   if err!=nil{authFailure(w,err);return}
   adminRequired:=(strings.HasPrefix(path,"/api/movimientos") ||
+    strings.HasPrefix(path,"/api/reportes") ||
     strings.HasPrefix(path,"/api/productos") && r.Method!=http.MethodGet)
   if adminRequired && session.User.Role!="admin" {
    writeJSON(w,403,map[string]string{"error":"No tenés permisos para esta operación"})
