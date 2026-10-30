@@ -14,7 +14,9 @@ import {
 } from '@/components/ui/sidebar'
 import { NAV_GROUPS } from './navigation'
 
-function AppSidebar({ activeId = 'pos', onSelect }) {
+const ADMIN_MODULES = new Set(['productos', 'categorias', 'movimientos', 'usuarios', 'configuracion', 'reportes'])
+
+function AppSidebar({ activeId = 'pos', onSelect, user }) {
   const { isMobile, setOpenMobile } = useSidebar()
 
   function handleNavigate(id) {
@@ -52,7 +54,7 @@ function AppSidebar({ activeId = 'pos', onSelect }) {
             <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item) => {
+                {group.items.filter((item) => user?.role === 'admin' || !ADMIN_MODULES.has(item.id)).map((item) => {
                   const Icon = item.icon
                   const isActive = activeId === item.id
                   return (
