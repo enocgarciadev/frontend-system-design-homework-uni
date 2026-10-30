@@ -46,6 +46,26 @@ func NewHandler(store *Store) http.Handler {
   default: methodNotAllowed(w,"PUT, DELETE")
   }
  })
+ mux.HandleFunc("/api/movimientos",func(w http.ResponseWriter,r *http.Request){
+  if store == nil { writeJSON(w,503,map[string]string{"error":"Base de datos no disponible"}); return }
+  switch r.Method {
+  case http.MethodGet:
+   movements,err := store.ListMovements(r.Context())
+   if err != nil { writeJSON(w,500,map[string]string{"error":"No se pudieron consultar los movimientos"}); return }
+   writeJSON(w,200,movements)
+  case http.MethodPost:
+   var input MovementInput
+   if !decodeJSON(w,r,&input) { return }
+   movement,err := store.CreateMovement(r.Context(),input)
+   if err != nil {
+    var domain *DomainError
+    if errors.As(err,&domain){ writeJSON(w,domain.Code,map[string]string{"error":domain.Message});return }
+    writeJSON(w,500,map[string]string{"error":"No se pudo registrar el movimiento"});return
+   }
+   writeJSON(w,201,movement)
+  default: methodNotAllowed(w,"GET, POST")
+  }
+ })
  mux.HandleFunc("/api/ventas",func(w http.ResponseWriter,r *http.Request){
   if r.Method != http.MethodPost { methodNotAllowed(w,"POST"); return }
   if store == nil { writeJSON(w,503,map[string]string{"error":"Base de datos no disponible"}); return }
