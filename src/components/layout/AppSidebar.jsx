@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sidebar'
 import { NAV_GROUPS } from './navigation'
 
-const ADMIN_MODULES = new Set(['productos', 'categorias', 'movimientos', 'usuarios', 'configuracion'])
+const ADMIN_MODULES = new Set(['productos', 'categorias', 'movimientos', 'usuarios', 'configuracion', 'reportes'])
 
 function AppSidebar({ activeId = 'pos', onSelect, user }) {
   const { isMobile, setOpenMobile } = useSidebar()
