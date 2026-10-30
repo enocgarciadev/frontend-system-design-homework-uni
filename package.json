@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "api:start": "go run ./server/cmd/api",
+    "api:dev": "go run ./server/cmd/api",
+    "test:api": "go test ./server/..."
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

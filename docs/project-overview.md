@@ -21,6 +21,7 @@ it, and what comes next. Read it before extending the codebase.
 | Scaffold: Vite + React 19 + Tailwind v4 | Done |
 | shadcn/ui full registry on Base UI (`base-nova`, JS mode) | Done |
 | CU-06 Point of sale + stock out | Done |
+| Go API (health check only) | Done in PR 1 — business operations and persistence pending |
 | App shell (sidebar, header, profile) | Done |
 | Navigation for future modules (placeholders) | Done |
 | Light/dark theme | Done |
@@ -33,6 +34,7 @@ it, and what comes next. Read it before extending the codebase.
 | Topic | Decision |
 |-------|----------|
 | Framework | Vite 8 + React 19 |
+| Backend | Go 1.23 (`net/http`) health check; PostgreSQL and business endpoints pending |
 | Language | JavaScript (JSX). TypeScript is recommended by shadcn, but the project was scaffolded as JS and stays JS (`components.json` has `tsx: false`). |
 | Component base | shadcn/ui on **Base UI** (`--base base`), preset `Nova`, icons `lucide` |
 | Styling | Tailwind CSS v4 via `@tailwindcss/vite`; tokens in `src/index.css`; `.dark` variant on `html` |
