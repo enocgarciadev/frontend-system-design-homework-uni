@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test'
 import { mkdir } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const folder = resolve('e2e/evidence')
+const folder = fileURLToPath(new URL('../evidence/', import.meta.url))
 test('capturas reales del MVP en navegador para entrega final', async ({ page }, testInfo) => {
   const password = process.env.TEST_ADMIN_PASSWORD
   expect(password).toBeTruthy()
@@ -16,7 +17,7 @@ test('capturas reales del MVP en navegador para entrega final', async ({ page },
   await page.goto('/')
   await expect(page.getByRole('status', { name: 'Estado de API: API conectada' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Agregar Arroz Faisán 1lb al ticket' })).toBeVisible()
-  await page.screenshot({ path: resolve(folder, `${prefix}-pos.png`), fullPage: true })
+  await page.screenshot({ path: join(folder, `${prefix}-pos.png`), fullPage: true })
 
   for (const [id, heading] of [
     ['Productos', 'Gestión de productos'],
@@ -29,6 +30,6 @@ test('capturas reales del MVP en navegador para entrega final', async ({ page },
     }
     await page.getByRole('button', { name: id, exact: true }).click()
     await expect(page.getByRole('heading', { name: heading })).toBeVisible()
-    await page.screenshot({ path: resolve(folder, `${prefix}-${id.toLowerCase()}.png`), fullPage: true })
+    await page.screenshot({ path: join(folder, `${prefix}-${id.toLowerCase()}.png`), fullPage: true })
   }
 })
