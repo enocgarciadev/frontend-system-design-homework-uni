@@ -6,7 +6,7 @@ import { formatCurrency } from '@/lib/format'
  * Barra inferior fija (solo pantallas pequeñas) para poder cobrar siempre,
  * sin importar cuánto crezca el catálogo o el ticket.
  */
-function MobileCheckoutBar({ cartCount, total, onCheckout }) {
+function MobileCheckoutBar({ cartCount, total, onCheckout, disabled = false }) {
   if (cartCount === 0) return null
 
   return (
@@ -30,6 +30,7 @@ function MobileCheckoutBar({ cartCount, total, onCheckout }) {
           type="button"
           className="h-11 shrink-0 px-5 text-base font-semibold"
           onClick={onCheckout}
+          disabled={disabled}
         >
           Cobrar
         </Button>
