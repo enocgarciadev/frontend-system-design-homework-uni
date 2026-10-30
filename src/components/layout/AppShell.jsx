@@ -17,6 +17,7 @@ import PosScreen from '@/features/pos/PosScreen'
 import ProductsScreen from '@/features/products/ProductsScreen'
 import MovementsScreen from '@/features/movements/MovementsScreen'
 import SalesHistoryScreen from '@/features/sales/SalesHistoryScreen'
+import ReportsScreen from '@/features/reports/ReportsScreen'
 import AppSidebar from './AppSidebar'
 import ModeToggle from './ModeToggle'
 import UserMenu from './UserMenu'
@@ -82,6 +83,8 @@ function AppShell({ user, onLogout }) {
             <MovementsScreen />
           ) : activeId === 'ventas' ? (
             <SalesHistoryScreen />
+          ) : activeId === 'reportes' ? (
+            <ReportsScreen />
           ) : (
             <ModulePlaceholder moduleId={activeId} />
           )}

@@ -231,3 +231,29 @@ test('login real, cierre de sesión y recuperación del formulario', async ({ pa
   const response = await page.request.get('/api/productos')
   expect(response.status()).toBe(401)
 })
+
+async function openReports(page, projectName) {
+  if (projectName === 'mobile-chromium') {
+    await page.getByRole('button', { name: 'Toggle Sidebar' }).first().click()
+  }
+  await page.getByRole('button', { name: 'Reportes', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Reportes del negocio' })).toBeVisible()
+}
+
+test('reportes visuales reflejan los datos reales de PostgreSQL', async ({ page }, testInfo) => {
+  const jsErrors = []
+  page.on('pageerror', error => jsErrors.push(error.message))
+  const source = await page.request.get('/api/reportes/resumen')
+  expect(source.status()).toBe(200)
+  const report = await source.json()
+  await page.goto('/')
+  await openReports(page, testInfo.project.name)
+  await expect(page.getByTestId('report-products-total')).toHaveText(String(report.productsTotal))
+  await expect(page.getByTestId('report-low-stock')).toHaveText(String(report.lowStockCount))
+  await expect(page.getByTestId('report-out-of-stock')).toHaveText(String(report.outOfStockCount))
+  await expect(page.getByRole('heading', { name: 'Productos para reponer' })).toBeVisible()
+  await page.reload()
+  await openReports(page, testInfo.project.name)
+  await expect(page.getByTestId('report-products-total')).toHaveText(String(report.productsTotal))
+  expect(jsErrors).toEqual([])
+})

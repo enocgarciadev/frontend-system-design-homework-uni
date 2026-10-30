@@ -34,6 +34,8 @@ func TestAuthorizationAndCSRF(t *testing.T) {
   {"anonymous sale","POST","/api/ventas",nil,"",401},
   {"seller catalog","GET","/api/productos",sellerCookie,"",200},
   {"seller movements","GET","/api/movimientos",sellerCookie,"",403},
+  {"seller reports","GET","/api/reportes/resumen",sellerCookie,"",403},
+  {"admin reports","GET","/api/reportes/resumen",adminCookie,"",200},
   {"seller cannot modify products","POST","/api/productos",sellerCookie,sellerCSRF,403},
   {"seller cannot adjust stock","POST","/api/movimientos",sellerCookie,sellerCSRF,403},
   {"seller without csrf","POST","/api/ventas",sellerCookie,"",403},
