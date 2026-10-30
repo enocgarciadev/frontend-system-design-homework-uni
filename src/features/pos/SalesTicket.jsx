@@ -114,6 +114,7 @@ function SalesTicket({
   missingAmount,
   change,
   canConfirm,
+  isSaving,
 }) {
   const isEmpty = entries.length === 0
 
@@ -131,7 +132,7 @@ function SalesTicket({
             size="sm"
             className="h-9 gap-1.5 text-muted-foreground"
             onClick={onClear}
-            disabled={isEmpty}
+            disabled={isEmpty || isSaving}
           >
             <Trash2 aria-hidden="true" className="size-4" />
             Vaciar
@@ -217,7 +218,7 @@ function SalesTicket({
               value={cash}
               onChange={(event) => onCashChange(event.target.value)}
               placeholder="0.00"
-              disabled={isEmpty}
+              disabled={isEmpty || isSaving}
               aria-label="Efectivo recibido"
               className="h-11 pr-3 pl-9 text-right font-semibold tabular-nums"
             />
@@ -256,7 +257,7 @@ function SalesTicket({
           disabled={!canConfirm}
         >
           <CheckCircle2 aria-hidden="true" className="size-5" />
-          Cobrar y Descontar Stock
+          {isSaving ? 'Registrando venta...' : 'Cobrar y Descontar Stock'}
         </Button>
         {canConfirm && change === null && (
           <p className="text-center text-[11px] text-muted-foreground">
