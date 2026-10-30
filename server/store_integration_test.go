@@ -29,11 +29,14 @@ func TestPostgresTransactions(t *testing.T){
   store.DB.ExecContext(context.Background(),"DELETE FROM productos WHERE id=$1",id)
  })
  handler:=NewHandler(store)
+ cookie,csrf:=testAuthSession(t,store,"admin")
  post:=func(payload SaleRequest)(int,SaleResponse,string){
   t.Helper()
   b,_:=json.Marshal(payload)
   w:=httptest.NewRecorder()
-  handler.ServeHTTP(w,httptest.NewRequest(http.MethodPost,"/api/ventas",bytes.NewReader(b)))
+  r:=httptest.NewRequest(http.MethodPost,"/api/ventas",bytes.NewReader(b))
+  authorizeTestRequest(r,cookie,csrf)
+  handler.ServeHTTP(w,r)
   var result SaleResponse
   json.Unmarshal(w.Body.Bytes(),&result)
   return w.Code,result,w.Body.String()
@@ -67,7 +70,9 @@ func TestPostgresTransactions(t *testing.T){
    payload:=SaleRequest{RequestID:fmt.Sprintf("%s-concurrent-%d",id,i),CashReceived:25,Items:[]SaleItemInput{{ProductID:id,Quantity:1}}}
    b,_:=json.Marshal(payload)
    w:=httptest.NewRecorder()
-   handler.ServeHTTP(w,httptest.NewRequest("POST","/api/ventas",bytes.NewReader(b)))
+   request:=httptest.NewRequest("POST","/api/ventas",bytes.NewReader(b))
+   authorizeTestRequest(request,cookie,csrf)
+   handler.ServeHTTP(w,request)
    statuses<-w.Code
   }(n)
  }
@@ -78,6 +83,8 @@ func TestPostgresTransactions(t *testing.T){
  if err:=store.DB.QueryRowContext(ctx,"SELECT stock_actual FROM productos WHERE id=$1",id).Scan(&stock);err!=nil||stock!=0{t.Fatalf("stock final %d, %v",stock,err)}
  // GET returns server-side catalog.
  w:=httptest.NewRecorder()
- handler.ServeHTTP(w,httptest.NewRequest("GET","/api/productos",nil))
+ request:=httptest.NewRequest("GET","/api/productos",nil)
+ authorizeTestRequest(request,cookie,csrf)
+ handler.ServeHTTP(w,request)
  if w.Code!=200||!strings.Contains(w.Body.String(),id){t.Fatalf("catálogo %d: %s",w.Code,w.Body.String())}
 }

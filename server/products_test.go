@@ -38,12 +38,14 @@ func TestProductCRUDPostgres(t *testing.T){
  productID:=fmt.Sprintf("pr03-%d",time.Now().UnixNano())
  t.Cleanup(func(){store.DB.ExecContext(context.Background(),"DELETE FROM productos WHERE id=$1",productID)})
  handler:=NewHandler(store)
+ cookie,csrf:=testAuthSession(t,store,"admin")
  req:=func(method,path string,body any)(int,[]byte){
   t.Helper()
   var reader *bytes.Reader
   if body==nil{reader=bytes.NewReader(nil)}else{raw,_:=json.Marshal(body);reader=bytes.NewReader(raw)}
   r:=httptest.NewRequest(method,path,reader)
   if body!=nil{r.Header.Set("Content-Type","application/json")}
+  authorizeTestRequest(r,cookie,csrf)
   w:=httptest.NewRecorder();handler.ServeHTTP(w,r)
   return w.Code,w.Body.Bytes()
  }

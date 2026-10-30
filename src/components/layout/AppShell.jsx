@@ -16,6 +16,8 @@ import {
 import PosScreen from '@/features/pos/PosScreen'
 import ProductsScreen from '@/features/products/ProductsScreen'
 import MovementsScreen from '@/features/movements/MovementsScreen'
+import SalesHistoryScreen from '@/features/sales/SalesHistoryScreen'
+import ReportsScreen from '@/features/reports/ReportsScreen'
 import AppSidebar from './AppSidebar'
 import ModeToggle from './ModeToggle'
 import UserMenu from './UserMenu'
@@ -51,13 +53,13 @@ function ModulePlaceholder({ moduleId }) {
   )
 }
 
-function AppShell() {
+function AppShell({ user, onLogout }) {
   const [activeId, setActiveId] = useState('pos')
   const activeModule = getModuleById(activeId)
 
   return (
     <SidebarProvider>
-      <AppSidebar activeId={activeId} onSelect={setActiveId} />
+      <AppSidebar activeId={activeId} onSelect={setActiveId} user={user} />
       <SidebarInset className="lg:h-svh lg:overflow-hidden">
         <header className="sticky top-0 z-20 flex h-14 items-center gap-2 border-b bg-background px-3 sm:px-4">
           <SidebarTrigger className="-ml-1 shrink-0" />
@@ -68,7 +70,7 @@ function AppShell() {
           <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
             <ApiStatus />
             <ModeToggle />
-            <UserMenu />
+            <UserMenu user={user} onLogout={onLogout} />
           </div>
         </header>
 
@@ -79,6 +81,10 @@ function AppShell() {
             <ProductsScreen />
           ) : activeId === 'movimientos' ? (
             <MovementsScreen />
+          ) : activeId === 'ventas' ? (
+            <SalesHistoryScreen />
+          ) : activeId === 'reportes' ? (
+            <ReportsScreen />
           ) : (
             <ModulePlaceholder moduleId={activeId} />
           )}

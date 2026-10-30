@@ -42,6 +42,7 @@ func TestSalesHistoryPostgres(t *testing.T) {
  detail,err=store.GetSale(ctx,id)
  if err!=nil||len(detail.Items)!=1{t.Fatalf("Historial perdido luego de baja: %+v %v",detail,err)}
  handler:=NewHandler(store)
+ cookie,csrf:=testAuthSession(t,store,"admin")
  for _,tt:=range []struct{path string;want int}{
   {"/api/ventas",200},
   {"/api/ventas/"+strconv.FormatInt(id,10),200},
@@ -50,7 +51,9 @@ func TestSalesHistoryPostgres(t *testing.T) {
   {"/api/ventas/999999999999",404},
  }{
   w:=httptest.NewRecorder()
-  handler.ServeHTTP(w,httptest.NewRequest(http.MethodGet,tt.path,nil))
+  request:=httptest.NewRequest(http.MethodGet,tt.path,nil)
+  authorizeTestRequest(request,cookie,csrf)
+  handler.ServeHTTP(w,request)
   if w.Code!=tt.want{t.Errorf("%s: HTTP %d, esperado %d: %s",tt.path,w.Code,tt.want,w.Body.String())}
  }
 }
