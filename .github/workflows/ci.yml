@@ -64,3 +64,23 @@ jobs:
         run: ./e2e/node_modules/.bin/playwright install --with-deps chromium
       - name: Test UI in real Chromium (desktop and mobile)
         run: npm --prefix e2e test
+
+      - name: Empaquetar código fuente del commit
+        if: success()
+        run: |
+          mkdir -p artifacts
+          git archive --format=zip --output=artifacts/PulpeStock-Web-Trabajo-12-fuente.zip HEAD
+      - name: Publicar ZIP de código
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PulpeStock-Web-Trabajo-12-fuente
+          path: artifacts/PulpeStock-Web-Trabajo-12-fuente.zip
+          if-no-files-found: error
+      - name: Publicar evidencias Chromium
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PulpeStock-Web-evidencias-Chromium
+          path: e2e/evidence/
+          if-no-files-found: warn
