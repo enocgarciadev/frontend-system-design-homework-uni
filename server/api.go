@@ -109,7 +109,7 @@ func NewHandler(store *Store) http.Handler {
  })
  registerAuthRoutes(mux,store)
  mux.HandleFunc("/",func(w http.ResponseWriter,_ *http.Request){ writeJSON(w,404,map[string]string{"error":"Not Found"}) })
- return mux
+ return protectBusinessRoutes(mux,store)
 }
 
 func methodNotAllowed(w http.ResponseWriter,method string){

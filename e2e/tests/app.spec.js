@@ -1,5 +1,26 @@
 import { expect, test } from '@playwright/test'
 
+const testEmail = 'admin@pulpestock.test'
+const testPassword = process.env.TEST_ADMIN_PASSWORD
+
+test.beforeEach(async ({ page }) => {
+  const response = await page.request.post('/api/auth/login', {
+    data: { email: testEmail, password: testPassword },
+  })
+  expect(response.status()).toBe(200)
+})
+
+async function postSale(page, data) {
+  const session = await page.request.get('/api/auth/me')
+  expect(session.status()).toBe(200)
+  const { csrfToken } = await session.json()
+  return page.request.post('/api/ventas', {
+    data,
+    headers: { 'X-CSRF-Token': csrfToken },
+  })
+}
+
+
 async function readCatalog(page) {
   const response = await page.request.get('/api/productos')
   expect(response.status()).toBe(200)
@@ -56,13 +77,11 @@ test('cobra usando Go, descuenta stock en PostgreSQL y persiste tras recargar', 
 test('API impide la venta si no hay stock y mantiene las existencias', async ({ page }) => {
   const before = byId(await readCatalog(page), 'agua-cristal-600ml')
   expect(before.stockActual).toBe(0)
-  const response = await page.request.post('/api/ventas', {
-    data: {
+  const response = await postSale(page, {
       requestId: crypto.randomUUID(),
       cashReceived: 20,
       items: [{ productId: 'agua-cristal-600ml', quantity: 1 }],
-    },
-  })
+    })
   expect(response.status()).toBe(409)
   expect(byId(await readCatalog(page), 'agua-cristal-600ml').stockActual).toBe(0)
 })
@@ -172,13 +191,11 @@ async function openSalesHistory(page, projectName) {
 test('historial muestra una venta persistida y sus precios históricos', async ({ page }, testInfo) => {
   const errors = []
   page.on('pageerror', (error) => errors.push(error.message))
-  const response = await page.request.post('/api/ventas', {
-    data: {
+  const response = await postSale(page, {
       requestId: crypto.randomUUID(),
       cashReceived: 100,
       items: [{ productId: 'arroz-faisan-1lb', quantity: 1 }],
-    },
-  })
+    })
   expect(response.status()).toBe(201)
   const saved = await response.json()
   expect(saved.total).toBe(38)
@@ -195,4 +212,22 @@ test('historial muestra una venta persistida y sus precios históricos', async (
   await page.getByRole('button', { name: `Ver detalle de venta #${saved.id}` }).click()
   await expect(page.getByText(`Detalle de venta #${saved.id}`)).toBeVisible()
   expect(errors).toEqual([])
+})
+
+test('login real, cierre de sesión y recuperación del formulario', async ({ page }) => {
+  await page.context().clearCookies()
+  await page.goto('/')
+  await expect(page.getByText('Iniciar sesión', { exact: true })).toBeVisible()
+  await page.getByLabel('Correo electrónico').fill(testEmail)
+  await page.getByLabel('Contraseña').fill('clave-incorrecta')
+  await page.getByRole('button', { name: 'Ingresar' }).click()
+  await expect(page.getByRole('alert')).toContainText('Credenciales inválidas')
+  await page.getByLabel('Contraseña').fill(testPassword)
+  await page.getByRole('button', { name: 'Ingresar' }).click()
+  await expect(page.getByRole('button', { name: 'Abrir menú de perfil' })).toBeVisible()
+  await page.getByRole('button', { name: 'Abrir menú de perfil' }).click()
+  await page.getByRole('menuitem', { name: 'Cerrar sesión' }).click()
+  await expect(page.getByText('Iniciar sesión', { exact: true })).toBeVisible()
+  const response = await page.request.get('/api/productos')
+  expect(response.status()).toBe(401)
 })

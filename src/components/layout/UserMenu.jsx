@@ -9,18 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { toast } from '@/components/ui/toast'
 
-function handleLogout() {
-  toast.add({
-    type: 'info',
-    title: 'Cerrar sesión',
-    description: 'Demo: el módulo de autenticación aún no está conectado.',
-    timeout: 3500,
-  })
-}
-
-function UserMenu() {
+function UserMenu({ user, onLogout }) {
+  const initials = user.name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]?.toUpperCase()).join('')
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -29,32 +20,24 @@ function UserMenu() {
       >
         <Avatar className="size-7 shrink-0 rounded-full">
           <AvatarFallback className="rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-            VM
+            {initials}
           </AvatarFallback>
         </Avatar>
-        <span className="hidden max-w-40 truncate lg:inline">
-          Vendedor de Mostrador
-        </span>
-        <ChevronsUpDown
-          aria-hidden="true"
-          className="hidden size-4 shrink-0 text-muted-foreground sm:block"
-        />
+        <span className="hidden max-w-40 truncate lg:inline">{user.name}</span>
+        <ChevronsUpDown aria-hidden="true" className="hidden size-4 shrink-0 text-muted-foreground sm:block" />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" sideOffset={8} className="min-w-52">
         <DropdownMenuGroup>
           <DropdownMenuLabel>
-            <p className="text-xs text-muted-foreground">Sesión activa</p>
-            <p className="text-sm font-semibold">Vendedor de Mostrador</p>
-            <p className="truncate text-xs text-muted-foreground">
-              mostrador@pulpestock.local
-            </p>
+            <p className="text-xs text-muted-foreground">Sesión activa · {user.role}</p>
+            <p className="text-sm font-semibold">{user.name}</p>
+            <p className="truncate text-xs text-muted-foreground">{user.email}</p>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onClick={handleLogout}>
-          <LogOut aria-hidden="true" />
-          Cerrar sesión
+        <DropdownMenuItem variant="destructive" onClick={onLogout}>
+          <LogOut aria-hidden="true" /> Cerrar sesión
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

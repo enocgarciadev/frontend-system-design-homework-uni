@@ -60,3 +60,32 @@ func TestPersistentLoginAndLogout(t *testing.T){
  if got:=makeRequest("POST","/api/auth/logout",nil,cookies[0],result.CSRFToken);got.Code!=204{t.Fatalf("logout %d: %s",got.Code,got.Body.String())}
  if got:=makeRequest("GET","/api/auth/me",nil,cookies[0],"");got.Code!=401{t.Fatalf("revoked session %d",got.Code)}
 }
+
+func testAuthSession(t *testing.T,store *Store,role string) (*http.Cookie,string) {
+ t.Helper()
+ email:=fmt.Sprintf("integration-%s-%d@pulpestock.test",role,time.Now().UnixNano())
+ user,err:=store.CreateUser(context.Background(),UserRegistration{
+  Name:"Usuario de pruebas",Email:email,Password:"Integration-Password-Strong-123",Role:role,
+ })
+ if err!=nil{t.Fatal(err)}
+ t.Cleanup(func(){
+  store.DB.ExecContext(context.Background(),"DELETE FROM usuarios WHERE id=$1",user.ID)
+ })
+ body,_:=json.Marshal(LoginInput{Email:email,Password:"Integration-Password-Strong-123"})
+ req:=httptest.NewRequest("POST","/api/auth/login",bytes.NewReader(body))
+ req.Header.Set("Content-Type","application/json")
+ w:=httptest.NewRecorder()
+ NewHandler(store).ServeHTTP(w,req)
+ if w.Code!=200{t.Fatalf("test login HTTP %d %s",w.Code,w.Body.String())}
+ var login struct {CSRFToken string `json:"csrfToken"`}
+ if err:=json.Unmarshal(w.Body.Bytes(),&login);err!=nil{t.Fatal(err)}
+ cookies:=w.Result().Cookies()
+ if len(cookies)!=1{t.Fatalf("login returned %d cookies",len(cookies))}
+ return cookies[0],login.CSRFToken
+}
+func authorizeTestRequest(req *http.Request,cookie *http.Cookie,csrf string) {
+ req.AddCookie(cookie)
+ if req.Method!=http.MethodGet&&req.Method!=http.MethodHead{
+  req.Header.Set("X-CSRF-Token",csrf)
+ }
+}

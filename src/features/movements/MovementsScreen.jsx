@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ArrowLeftRight, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { apiFetch } from '@/lib/api'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -65,7 +66,7 @@ function MovementsScreen() {
           (type === 'entrada' && amount < 1)) {
         throw new Error('Ingresá una variación entera válida, distinta de cero.')
       }
-      const response = await fetch(`${baseUrl}/api/movimientos`, {
+      const response = await apiFetch('/api/movimientos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId, type, quantity: amount }),

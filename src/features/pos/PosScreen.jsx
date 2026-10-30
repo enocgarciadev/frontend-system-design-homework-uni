@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { formatCurrency } from '@/lib/format'
 import { toast } from '@/components/ui/toast'
+import { apiFetch } from '@/lib/api'
 import MobileCheckoutBar from './MobileCheckoutBar'
 import ProductCatalog from './ProductCatalog'
 import SalesTicket from './SalesTicket'
@@ -117,7 +118,7 @@ function PosScreen() {
     if (!saleRequestId.current) saleRequestId.current = crypto.randomUUID()
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/ventas`, {
+      const response = await apiFetch('/api/ventas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
